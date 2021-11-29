@@ -5,12 +5,15 @@ from dataclasses import dataclass
 class Account:
     name: str
     number: str
-    balance: int = 0
+    _balance_cache: int = 0
 
     def deposit(self, amount: int) -> None:
-        self.balance += amount
+        self._balance_cache += amount
 
     def withdraw(self, amount: int) -> None:
-        if amount > self.balance:
+        if amount > self._balance_cache:
             raise ValueError("Insufficient funds")
-        self.balance -= amount
+        self._balance_cache -= amount
+        
+    def clear_cache(self):
+        self._balance_cache = 0
