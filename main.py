@@ -1,26 +1,31 @@
 from banking.bank import Bank
-
+from banking.controller import BankController
+from banking.commands import Deposit, Withdrawal, Transfer
 
 def main() -> None:
 
     # create a bank
     bank = Bank()
 
+    # create a bank controller
+    controller = BankController()
+
     # create some accounts
     account1 = bank.create_account("LidiaBaciu")
     account2 = bank.create_account("Google")
     account3 = bank.create_account("Microsoft")
 
-    account1.deposit(100000)
-    account2.deposit(100000)
-    account3.deposit(100000)
+    controller.execute(Deposit(account1, 100000))
+    controller.execute(Deposit(account2, 100000))
+    controller.execute(Deposit(account3, 100000))
 
     # transfer
-    account2.withdraw(50000)
-    account1.deposit(50000)
-
-    account1.withdraw(150000)
-
+    controller.execute(
+        Transfer(from_account=account2, to_account=account1, amount=50000)
+    )
+    controller.execute(Withdrawal(account1, 150000))
+    controller.undo()
+    
     print(bank)
 
 
